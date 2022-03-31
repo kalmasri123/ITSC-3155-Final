@@ -21,11 +21,11 @@ Include the name of all of your team members in the document to be submitted (2 
 
 ### Bipin Bhatt
 
- - List the source of and describe at least 1 potential data sets(8 total points)
- - Identify who your customer/s would  be (8 total points)
- - Describe the problem that  the  proposed project solves and justify its need (10 total points)
- - State the product vision and how your web based project would be useful to society (8 points)
- - Identify the major features of each of the proposed projects (12 total points)
+ - WHO.int: https://covid19.who.int/?mapFilter=vaccinations, illustrates the confirmed covid 19 cases and the confirmed vaccination report until now.
+ - The possible customers would be journalists, health workers, local people, etc.
+ - The project can be useful to identify the countries which are mostly affected by covid 19. This information can be helpful for the tourists who travel foriegn countries.
+ - The product vision is to demonstrate the countries which are affected by corona virus and it also demonstrates the status of people getting the vaccination.
+ - Identify the countries which are at high risk of corona virus, shows the vaccination status in the related countries. This also gives information if the covid cases are increasing or decreasing with time.
 
 ### Kareem Almasri
 
