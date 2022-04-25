@@ -13,13 +13,13 @@ vaccinations = pd.read_csv("Data/vaccination-data.csv")
 
 vaccinationsDf = vaccinations.sort_values("PERSONS_FULLY_VACCINATED", ascending=False).head(10)
 vaccinationsRatioData = [
-	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED_PER100'], name = "Fully Vaccinated"),
-	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE_PER100'], name = "Fully Vaccinated + Booster")
+	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED_PER100'], name = "Vaccinated"),
+	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE_PER100'], name = "Booster")
 ]
 
 vaccinationsData = [
-	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED'], name = "Fully Vaccinated"),
-	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE'], name = "Fully Vaccinated + Booster")
+	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED'], name = "Vaccinated"),
+	go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE'], name = "Booster")
 ]
 
 app = dash.Dash()
@@ -75,13 +75,13 @@ def update_figure(countries):
 	vaccinationsDf = vaccinations[vaccinations.ISO3.isin(countries)].sort_values("PERSONS_FULLY_VACCINATED", ascending=False).head(10)
 
 	vaccinationsRatioData = [
-		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED_PER100'], name = "Fully Vaccinated"),
-		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE_PER100'], name = "Fully Vaccinated + Booster")
+		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED_PER100'], name = "Vaccinated"),
+		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE_PER100'], name = "Booster")
 	]
 
 	vaccinationsData = [
-		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED'], name = "Fully Vaccinated"),
-		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE'], name = "Fully Vaccinated + Booster")
+		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_FULLY_VACCINATED'], name = "Vaccinated"),
+		go.Bar(x = vaccinationsDf['COUNTRY'], y = vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE'], name = "Booster")
 	]
 
 	ratioFigure = {
