@@ -1,3 +1,4 @@
+from unittest import case
 import dash
 from dash import dcc
 from dash import html
@@ -8,11 +9,17 @@ import sd_material_ui as material
 import numpy as np
 
 # Load CSV file from Datasets folder
-deaths = pd.read_csv("Data/WHO-COVID-19-global-data.csv")
+cases = pd.read_csv("Data/WHO-COVID-19-global-data.csv")
 vaccinations = pd.read_csv("Data/vaccination-data.csv")
 
 vaccinationsDf = vaccinations.sort_values(
     "PERSONS_FULLY_VACCINATED", ascending=False).head(10)
+casesDf = cases.sort_values(
+    "Cumulative_deaths", ascending=False).head(10)
+casesData = [
+    go.Bar(x=casesDf['Country'],
+           y=casesDf['Cumulative_deaths'], name="Deaths"),
+]
 vaccinationsRatioData = [
     go.Bar(x=vaccinationsDf['COUNTRY'],
            y=vaccinationsDf['PERSONS_FULLY_VACCINATED_PER100'], name="Vaccinated"),
@@ -40,9 +47,9 @@ app.layout = html.Div(
         html.H3(children="Vaccination Data Viewer", style={
                 "margin": "10px 0", "fontWeight": "normal"}),
         material.DropDownMenu(labelText="Countries", id="vaccinationCountry", variant="filled", multiple=True,
-                              value=[x["ISO3"]
+                              value=[x["COUNTRY"]
                                      for idx, x in vaccinationsDf.iterrows()],
-                              options=[{"primaryText": x["COUNTRY"], "value": x["ISO3"]} for idx, x in vaccinations.iterrows()]),
+                              options=[{"primaryText": x["COUNTRY"], "value": x["COUNTRY"]} for idx, x in vaccinations.iterrows()]),
         dcc.Graph(
             id="vaccinationRatioGraph",
             figure={
@@ -66,6 +73,18 @@ app.layout = html.Div(
                     barmode="stack"
                 ),
             },
+        ),
+        dcc.Graph(
+            id="deathsGraph",
+            figure={
+                "data": casesData,
+                "layout": go.Layout(
+                    title="Total Deaths by Country",
+                    xaxis_title="Country",
+                    yaxis_title="Total deaths",
+                    barmode="stack"
+                ),
+            },
         )
     ],
     style={
@@ -77,14 +96,15 @@ app.layout = html.Div(
 )
 
 
-@app.callback([Output("vaccinationRatioGraph", "figure"), Output("vaccinationGraph", "figure")], [Input("vaccinationCountry", "value")])
+@app.callback([Output("vaccinationRatioGraph", "figure"), Output("vaccinationGraph", "figure"),Output("deathsGraph", "figure")], [Input("vaccinationCountry", "value")])
 def update_figure(countries):
-    vaccinationsDf = vaccinations[vaccinations.ISO3.isin(countries)].sort_values(
+    vaccinationsDf = vaccinations[vaccinations.COUNTRY.isin(countries)].sort_values(
         "PERSONS_FULLY_VACCINATED", ascending=False).head(10)
 
     vaccinationsRatioDf = vaccinationsDf.sort_values(
         by=["PERSONS_FULLY_VACCINATED_PER100", "PERSONS_BOOSTER_ADD_DOSE_PER100"], ascending=False).head(10)
-
+    casesDf = cases[cases.Country.isin(countries)].groupby(by="Country").aggregate("max").reset_index().sort_values("Cumulative_deaths", ascending=False).head(10)
+    
     vaccinationsRatioData = [
         go.Bar(x=vaccinationsRatioDf['COUNTRY'],
                y=vaccinationsRatioDf['PERSONS_FULLY_VACCINATED_PER100'], name="Fully Vaccinated"),
@@ -99,13 +119,17 @@ def update_figure(countries):
                y=vaccinationsDf['PERSONS_BOOSTER_ADD_DOSE'], name="Booster")
     ]
 
+    casesData = [
+        go.Bar(x=casesDf['Country'],
+               y=casesDf['Cumulative_deaths'], name="Deaths"),
+    ]
     ratioFigure = {
         "data": vaccinationsRatioData,
         "layout": go.Layout(
             title="Vaccination Percentages by Country",
             xaxis_title="Country",
             yaxis_title="Vaccination/Booster Percentage",
-            barmode="stack"
+            # barmode="stack"
         ),
     }
 
@@ -118,8 +142,16 @@ def update_figure(countries):
             barmode="stack"
         ),
     }
-
-    return ratioFigure, figure
+    casesFigure = {
+        "data": casesData,
+        "layout": go.Layout(
+            title="Total Deaths by Country",
+            xaxis_title="Country",
+            yaxis_title="Total Deaths",
+            # barmode="stack"
+        ),
+    }
+    return ratioFigure, figure, casesFigure
 
 
 if __name__ == '__main__':
