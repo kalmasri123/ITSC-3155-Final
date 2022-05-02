@@ -1,4 +1,3 @@
-from unittest import case
 import dash
 from dash import dcc
 from dash import html
@@ -6,7 +5,6 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objs as go
 import sd_material_ui as material
-import numpy as np
 
 # Load CSV file from Datasets folder
 cases = pd.read_csv("Data/WHO-COVID-19-global-data.csv")
